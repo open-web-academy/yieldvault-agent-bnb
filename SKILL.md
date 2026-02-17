@@ -1,189 +1,151 @@
-# Yield Farming Agent Skill
+---
+name: yieldvault-agent
+description: Autonomous yield farming agent for BNB Chain with deterministic execution, smart contract integration, and automated decision-making.
+---
 
-Autonomous decision engine para gestión optimizada de estrategias de yield farming en múltiples vaults.
+# YieldVault Agent
+
+Autonomous yield farming agent for BNB Chain with deterministic execution, smart contract integration, and automated decision-making.
 
 ## Features
 
-- **Deterministic Decision Engine**: 1 acción por ciclo, sin randomness
-- **Cross-Vault Rebalancing**: Optimización automática de APR neto
-- **Risk-Aware**: Penalty por risk_score, límite máximo de allocation
-- **Audit Trail**: Execution records con hash SHA256 de decisiones
-- **Testnet by Default**: BNB testnet (chainId 97), configurable para mainnet
+- **Deterministic Decision Engine** - Same input always produces same output (auditable)
+- **Smart Contract Integration** - Interact with YieldVault contracts on BNB testnet/mainnet
+- **Autonomous Scheduler** - Run farming decisions hourly without manual intervention
+- **Transaction Executor** - Automatic DEPOSIT, WITHDRAW, HARVEST, COMPOUND, REBALANCE actions
+- **Telegram Alerts** - Real-time notifications for executions, APR changes, and errors
+- **Risk Management** - Conservative risk filtering (only vaults with risk_score ≤ 0.5)
+- **Yield Optimization** - Net APR calculation (apr - fees - risk_penalty)
+
+## Installation
+
+```bash
+clawhub install yieldvault-agent
+```
+
+## Quick Start
+
+### 1. Configure
+
+```bash
+cp config.deployed.json .env.local
+# Edit with your contract addresses and RPC endpoint
+```
+
+### 2. Deploy Contracts (if needed)
+
+```bash
+cd contracts
+npm install
+npm run deploy:testnet
+```
+
+### 3. Run Tests
+
+```bash
+npm test                    # Unit tests
+node test.live.mock.js      # Integration tests (offline)
+node test.live.js           # Live testnet tests
+```
+
+### 4. Start Scheduler
+
+```bash
+node scheduler.js
+# Runs decision cycle every hour against testnet
+```
+
+### 5. Monitor Alerts
+
+Telegram notifications sent automatically for:
+- Execution started (vault_id, action, amount)
+- APR changes (>1% delta)
+- Errors (with severity level)
+- Cycle completion (stats summary)
+
+## Architecture
+
+```
+Smart Contracts (BNB Testnet/Mainnet)
+    ↓
+BlockchainReader (live vault data)
+    ↓
+YieldFarmingAgent (deterministic decisions)
+    ↓
+TransactionExecutor (sign & broadcast)
+    ↓
+Scheduler (hourly automation)
+    ↓
+Notifications (Telegram alerts)
+```
 
 ## Configuration
 
-### Default Parameters
+Edit `config.scheduler.json`:
 
 ```json
 {
   "chainId": 97,
+  "interval_minutes": 60,
   "harvest_threshold_usd": 25,
   "rebalance_apr_delta": 0.02,
-  "max_allocation_percent": 0.35
-}
-```
-
-### Config Override
-
-Create `config.json` to override defaults:
-
-```json
-{
-  "chainId": 56,
-  "harvest_threshold_usd": 50
-}
-```
-
-## Vault Schema
-
-```json
-{
-  "id": "string (unique vault id)",
-  "name": "string",
-  "tvl_usd": "number",
-  "apr": "number (0-1 format, e.g., 0.25 = 25%)",
-  "underlying": "string (token symbol)",
-  "strategy": "string (e.g., liquidity-mining, auto-compound)",
-  "fees": "number (0-1 format, e.g., 0.05 = 5%)",
-  "risk_score": "number (0-1 scale, 0=no risk, 1=max risk)"
+  "max_allocation_percent": 0.35,
+  "risk_score_threshold": 0.5
 }
 ```
 
 ## Decision Logic
 
-### Step 1: Calculate NET_APR per Vault
+1. **Read** current vault state (APR, TVL, user balance)
+2. **Calculate** Net APR = apr - fees - (risk_score × 0.10)
+3. **Filter** vaults with risk_score ≤ 0.5
+4. **Select** vault with highest Net APR
+5. **Decide** action:
+   - HARVEST if pending_rewards ≥ $25 USD
+   - COMPOUND if net_apr ≥ 2% delta
+   - REBALANCE if another vault beats current by ≥ 2%
+   - NOOP if already optimized
 
-```
-risk_penalty = risk_score * 0.10  (10% penalty per risk unit)
-net_apr = apr - fees - risk_penalty
-```
+6. **Execute** transaction (with retry logic)
+7. **Log** execution record (SHA256 auditable)
 
-**Filter:** Only vaults where `risk_score <= 0.5`
+## Supported Networks
 
-### Step 2: Determine Best Vault
+- **Testnet:** BNB Chain Testnet (chainId: 97)
+- **Mainnet:** BNB Chain Mainnet (chainId: 56)
 
-```
-best_vault = vault with highest net_apr (within risk filter)
-```
+## Security
 
-### Step 3: Choose Action (Priority Order)
+- ✅ Deterministic execution (reproducible, auditable)
+- ✅ SHA256 audit trail for every decision
+- ✅ Risk filtering (conservative)
+- ✅ Constraint enforcement (max 35% per vault)
+- ✅ Retry logic with exponential backoff
+- ✅ No hardcoded private keys (use environment variables)
 
-1. **HARVEST** if `best_vault.pending_rewards >= harvest_threshold_usd`
-2. **COMPOUND** if `net_apr_compound_gain >= rebalance_apr_delta` AND no pending harvest
-3. **REBALANCE** if:
-   - Exists vault with `net_apr > best_vault.net_apr + rebalance_apr_delta` (>= 2% delta)
-   - Destination `risk_score <= best_vault.risk_score`
-   - Source allocation > 0
-   - Rebalance amount won't exceed `max_allocation_percent` at destination
-4. **NOOP** (reason: "all_optimized" or "no_viable_action")
+## Production Readiness
 
-### Step 4: Enforce Constraints
+For mainnet deployment, add:
 
-- **max_allocation_percent**: No vault > 35% of total allocation
-- **risk_score filter**: Only consider vaults with risk_score <= 0.5
-- **Amount Format**: All amounts as decimal strings
+1. **Chainlink Oracle** - Live APR feeds
+2. **Hardware Wallet Support** - Ledger/Trezor signing
+3. **Smart Contract Audit** - Professional security review
+4. **Emergency Pause** - Multi-sig pause mechanism
 
-## Action Schema
+See `FINAL_CHECKLIST.md` for complete production requirements.
 
-```json
-{
-  "action": "DEPOSIT|WITHDRAW|HARVEST|COMPOUND|REBALANCE|NOOP",
-  "vault_id": "string",
-  "token": "string (required for DEPOSIT, REBALANCE)",
-  "amount": "string (decimal format)",
-  "from_vault_id": "string (REBALANCE only)",
-  "reason": "string (NOOP only)"
-}
-```
+## Documentation
 
-## Execution Record Schema
-
-```json
-{
-  "timestamp": "ISO8601",
-  "cycle_num": "number",
-  "chainId": "number",
-  "decision": {
-    "best_vault_id": "string",
-    "best_vault_net_apr": "string (decimal)",
-    "action": {...},
-    "rationale": "string"
-  },
-  "vault_states": [
-    {
-      "id": "string",
-      "net_apr": "string",
-      "allocation_percent": "string",
-      "pending_rewards_usd": "string"
-    }
-  ],
-  "decision_hash": "string (SHA256 of decision object)",
-  "execution_hash": "string (SHA256 of full record)"
-}
-```
-
-## Usage
-
-### Node.js / JavaScript
-
-```javascript
-const YieldFarmingAgent = require('./index.js');
-
-const agent = new YieldFarmingAgent({
-  chainId: 97,
-  harvest_threshold_usd: 25,
-  rebalance_apr_delta: 0.02,
-  max_allocation_percent: 0.35
-});
-
-const vaults = require('./mockdata.json');
-const currentAllocation = { /* your allocation state */ };
-
-const executionRecord = agent.decide(vaults, currentAllocation);
-console.log(JSON.stringify(executionRecord, null, 2));
-```
-
-### REST Endpoint (Future)
-
-```
-POST /yield-farming-agent/decide
-Body: {
-  vaults: [...],
-  current_allocation: {...},
-  config: {...}
-}
-Response: execution_record
-```
-
-## Hash Audit
-
-Every execution record includes:
-- **decision_hash**: SHA256 of `decision` object (ensures decision integrity)
-- **execution_hash**: SHA256 of full record (ensures audit trail immutability)
-
-Verify integrity:
-```javascript
-const crypto = require('crypto');
-const decisionStr = JSON.stringify(record.decision);
-const computed = crypto.createHash('sha256').update(decisionStr).digest('hex');
-console.assert(computed === record.decision_hash, 'Decision hash mismatch!');
-```
-
-## Files
-
-- `index.js` - Engine implementation
-- `mockdata.json` - Sample vault data
-- `config.default.json` - Default configuration
-- `execution.example.json` - Example execution record
+- `README.md` - Full user guide
 - `SKILL.md` - This file
+- `FINAL_CHECKLIST.md` - Production requirements
+- `INTEGRATION_GUIDE.md` - Smart contract integration
+- `EXAMPLES.md` - Usage examples
+- `RESPUESTAS_PREGUNTAS.md` - FAQ & architecture
 
-## Next Steps (On-Chain)
+## Support
 
-1. **Deploy to Blockchain**: Adapt decision output to smart contract calldata
-2. **Event Emission**: Emit `ExecutionRecorded(cycle, decisionHash)` on-chain
-3. **Access Control**: Add keeper/executor role checks
-4. **Multi-sig**: Consider gov approval for large rebalances
-5. **Monitor**: Off-chain watcher to detect/alert decision divergence
+Issues & PRs welcome: https://github.com/open-web-academy/yieldvault-agent-bnb
 
 ## License
 
