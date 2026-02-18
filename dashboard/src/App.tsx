@@ -5,7 +5,11 @@ interface ExecutionRecord {
   timestamp: number
   action: string
   vault_id: string
+  vault_name?: string
   state_hash: string
+  tx_hash?: string
+  confidence?: number
+  net_apr?: number
 }
 
 export default function App() {
@@ -36,14 +40,38 @@ export default function App() {
       <h1>Yield Farming Agent Dashboard</h1>
       <div className="status">{status}</div>
       <table>
-        <thead><tr><th>Time</th><th>Vault</th><th>Action</th><th>Hash</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Vault</th>
+            <th>Action</th>
+            <th>APR</th>
+            <th>Confidence</th>
+            <th>TX Hash (BNB Testnet)</th>
+          </tr>
+        </thead>
         <tbody>
           {records.map((r, i) => (
             <tr key={i}>
               <td>{new Date(r.timestamp * 1000).toLocaleTimeString()}</td>
-              <td>{r.vault_id}</td>
-              <td>{r.action}</td>
-              <td>{r.state_hash.slice(0, 16)}...</td>
+              <td title={r.vault_name}>{r.vault_id.slice(0, 20)}</td>
+              <td><strong>{r.action}</strong></td>
+              <td>{r.net_apr ? r.net_apr.toFixed(2) + '%' : '-'}</td>
+              <td>{r.confidence ? (r.confidence * 100).toFixed(0) + '%' : '-'}</td>
+              <td>
+                {r.tx_hash && r.tx_hash !== 'null' ? (
+                  <a 
+                    href={`https://testnet.bscscan.com/tx/${r.tx_hash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#0066cc', textDecoration: 'none' }}
+                  >
+                    {r.tx_hash.slice(0, 10)}...{r.tx_hash.slice(-8)}
+                  </a>
+                ) : (
+                  <span style={{ color: '#999' }}>-</span>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
