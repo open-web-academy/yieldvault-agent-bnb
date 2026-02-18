@@ -1,11 +1,11 @@
 {
   "scheduler": {
     "enabled": true,
-    "execution_interval_seconds": 3600,
+    "execution_interval_seconds": 60,
     "timezone": "UTC",
     "max_concurrent_executions": 1,
     "retry_failed_cycles": true,
-    "retry_delay_seconds": 300
+    "retry_delay_seconds": 10
   },
   "blockchain": {
     "rpc_url": "https://data-seed-prebsc-1-b.binance.org:8545",
@@ -51,39 +51,30 @@
   },
   "vaults": [
     {
-      "id": "VAULT-USDC-AAVE",
-      "address": "0x0000000000000000000000000000000000000000",
-      "token": "USDC",
-      "apr": 8.5,
-      "fees": 0.5,
-      "risk_score": 0.2,
-      "enabled": true
-    },
-    {
-      "id": "VAULT-USDT-COMPOUND",
-      "address": "0x0000000000000000000000000000000000000000",
-      "token": "USDT",
-      "apr": 7.2,
-      "fees": 0.4,
-      "risk_score": 0.25,
-      "enabled": true
-    },
-    {
-      "id": "VAULT-ETH-CURVE",
-      "address": "0x0000000000000000000000000000000000000000",
+      "id": "vault_eth_staking_001",
+      "address": "0x588eD88A145144F1E368D624EeFC336577a4276b",
       "token": "ETH",
-      "apr": 12.3,
-      "fees": 1.0,
-      "risk_score": 0.35,
+      "apr": 12.5,
+      "fees": 0.25,
+      "risk_score": 0.3,
       "enabled": true
     },
     {
-      "id": "VAULT-BNB-PANCAKE",
-      "address": "0x0000000000000000000000000000000000000000",
-      "token": "BNB",
-      "apr": 15.8,
+      "id": "vault_high_risk_001",
+      "address": "0x6E05a63550200e20c9C4F112E337913c32FEBdf0",
+      "token": "1INCH",
+      "apr": 18.2,
       "fees": 1.5,
-      "risk_score": 0.4,
+      "risk_score": 0.8,
+      "enabled": true
+    },
+    {
+      "id": "vault_link_oracle_001",
+      "address": "0x0C035842471340599966AA5A3573AC7dB34D14E4",
+      "token": "LINK",
+      "apr": 14.3,
+      "fees": 0.5,
+      "risk_score": 0.25,
       "enabled": true
     }
   ],

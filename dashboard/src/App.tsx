@@ -27,7 +27,7 @@ export default function App() {
       }
     }
     fetchRecords()
-    const interval = setInterval(fetchRecords, 2000)
+    const interval = setInterval(fetchRecords, 30000)
     return () => clearInterval(interval)
   }, [])
 
