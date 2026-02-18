@@ -9,7 +9,7 @@
 ```bash
 npm install
 # or link as OpenClaw skill
-ln -s /home/ubuntu/.openclaw/workspace/skills/yield-farming-agent /path/to/openclaw/skills/
+ln -s /home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb /path/to/openclaw/skills/
 ```
 
 ### Basic Usage
@@ -292,7 +292,7 @@ contract YieldFarmingAutomation {
 ## File Structure
 
 ```
-yield-farming-agent/
+clawtrade-bnb/
 ├── index.js                 # Main decision engine
 ├── mockdata.json           # Sample vault data
 ├── config.default.json     # Default parameters

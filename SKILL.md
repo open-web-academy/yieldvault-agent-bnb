@@ -1,13 +1,13 @@
 ---
-name: yieldvault-agent
+name: clawtrade-bnb
 version: 1.1.0
-description: Autonomous DeFi yield farming agent for BNB Chain with multi-strategy engine, network switching, and reinforced learning.
-keywords: yield-farming, defi, autonomous-agent, multi-strategy, reinforced-learning
+description: Autonomous DeFi trading agent for BNB Chain with multi-strategy engine, network switching, and reinforced learning.
+keywords: trading, defi, autonomous-agent, multi-strategy, reinforced-learning, bnb-chain
 ---
 
-# YieldVault Agent - DeFi Strategy Engine v1.1.0
+# CawTrade BNB - Autonomous DeFi Trading Agent v1.1.0
 
-**Production-ready autonomous yield farming agent** for BNB Chain testnet & mainnet. Features 3 intelligent strategies, real-time performance analytics, on-chain event logging, and self-improving reinforced learning.
+**Production-ready autonomous trading agent** for BNB Chain testnet & mainnet. Features 3 intelligent strategies, real-time performance analytics, on-chain event logging, and self-improving reinforced learning.
 
 ## Core Features
 
@@ -53,8 +53,8 @@ keywords: yield-farming, defi, autonomous-agent, multi-strategy, reinforced-lear
 
 ### 1. Install Skill
 ```bash
-clawhub install yieldvault-agent
-cd ~/.openclaw/workspace/skills/yield-farming-agent
+clawhub install clawtrade-bnb
+cd ~/.openclaw/workspace/skills/clawtrade-bnb
 npm install
 ```
 
@@ -282,7 +282,7 @@ node agent-cli.js network mainnet
 ## File Structure
 
 ```
-yield-farming-agent/
+clawtrade-bnb/
 ├── defi-strategy-engine.js          # 3 strategies (compound, rebalance, harvest)
 ├── on-chain-logger.js                # Event logging with TX hashes
 ├── strategy-scheduler.js              # Main loop (60s cycles)
@@ -339,7 +339,7 @@ For someone else to replicate:
 
 1. **Install**
    ```bash
-   clawhub install yieldvault-agent
+   clawhub install clawtrade-bnb
    npm install
    ```
 
@@ -370,8 +370,8 @@ For someone else to replicate:
 
 ## Support & Community
 
-- GitHub Issues: https://github.com/open-web-academy/yieldvault-agent-bnb
-- ClawHub: https://clawhub.com (search: yieldvault-agent)
+- GitHub Issues: https://github.com/open-web-academy/clawtrade-bnb-bnb
+- ClawHub: https://clawhub.com (search: clawtrade-bnb)
 - Discord: https://discord.com/invite/clawd
 
 ## Version History

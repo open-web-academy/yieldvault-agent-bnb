@@ -16,15 +16,15 @@ This guide shows **exactly** how to replicate the entire yield farming agent fro
 
 **Option A: From ClawHub (Recommended)**
 ```bash
-clawhub install yieldvault-agent
-cd ~/.openclaw/workspace/skills/yield-farming-agent
+clawhub install clawtrade-bnb
+cd ~/.openclaw/workspace/skills/clawtrade-bnb
 npm install
 ```
 
 **Option B: From GitHub**
 ```bash
-git clone https://github.com/open-web-academy/yieldvault-agent-bnb.git
-cd yieldvault-agent-bnb
+git clone https://github.com/open-web-academy/clawtrade-bnb-bnb.git
+cd clawtrade-bnb-bnb
 npm install
 ```
 
@@ -168,7 +168,7 @@ node agent-cli.js learn now
 ## File Structure After Setup
 
 ```
-yield-farming-agent/
+clawtrade-bnb/
 ├── .env                              # Your secrets (git-ignored)
 ├── .network.json                     # Network preference (auto-created)
 ├── execution-log.jsonl               # Action history (auto-created)
@@ -417,7 +417,7 @@ grep -o '"action":"[^"]*"' execution-log.jsonl | sort | uniq -c
 ## Getting Help
 
 - **Documentation:** `README.md`, `README_ADVANCED.md`
-- **GitHub Issues:** https://github.com/open-web-academy/yieldvault-agent-bnb/issues
+- **GitHub Issues:** https://github.com/open-web-academy/clawtrade-bnb-bnb/issues
 - **CLI Help:** `node agent-cli.js help`
 - **Live Logs:** `tail -f execution-log.jsonl`
 

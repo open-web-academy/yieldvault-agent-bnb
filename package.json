@@ -1,7 +1,7 @@
 {
-  "name": "yield-farming-agent",
+  "name": "clawtrade-bnb",
   "version": "1.1.0",
-  "description": "Autonomous DeFi yield farming agent with 3 intelligent strategies, network switching, performance analytics, and self-improving reinforced learning for BNB Chain",
+  "description": "Autonomous DeFi trading agent with 3 intelligent strategies, network switching, performance analytics, and self-improving reinforced learning for BNB Chain",
   "main": "strategy-scheduler.js",
   "scripts": {
     "start": "node strategy-scheduler.js",
@@ -47,10 +47,11 @@
   },
   "devDependencies": {},
   "clayhub": {
-    "skillId": "yieldvault-agent",
+    "skillId": "clawtrade-bnb",
     "category": "defi",
     "difficulty": "advanced",
     "tags": [
+      "trading",
       "yield-farming",
       "autonomous-agent",
       "smart-contracts",
