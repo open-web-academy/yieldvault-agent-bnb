@@ -49,9 +49,16 @@ app.get('/api/health', (req, res) => {
 const dashboardDist = path.join(__dirname, 'dashboard', 'dist');
 if (fs.existsSync(dashboardDist)) {
   app.use(express.static(dashboardDist));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(dashboardDist, 'index.html'));
+  // SPA fallback: serve index.html for all non-API routes
+  app.use((req, res) => {
+    if (!req.url.startsWith('/api/')) {
+      res.sendFile(path.join(dashboardDist, 'index.html'));
+    } else {
+      res.status(404).json({ error: 'Not Found' });
+    }
   });
+} else {
+  console.warn('⚠️  Dashboard dist folder not found. Build with: npm run build:dashboard');
 }
 
 // === START SERVER ===
