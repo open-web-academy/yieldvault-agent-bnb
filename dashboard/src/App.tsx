@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react'
+import { Sidebar } from './components/Sidebar'
+import { Topbar } from './components/Topbar'
 import { Operator } from './components/Operator'
 import { AgentTeam } from './components/AgentTeam'
+import { ActivityFeed } from './components/ActivityFeed'
+import { PerformanceMetrics } from './components/PerformanceMetrics'
 import { Explainability } from './components/Explainability'
-import './App.css'
+import './design-system.css'
 
 interface ExecutionRecord {
   timestamp: number
@@ -19,7 +23,7 @@ interface ExecutionRecord {
   decision?: any
 }
 
-interface PerformanceMetrics {
+interface PerformanceMetricsData {
   totalHarvested: number
   totalCompounded: number
   realizedAPR: number | string
@@ -28,10 +32,11 @@ interface PerformanceMetrics {
 
 export default function App() {
   const [records, setRecords] = useState<ExecutionRecord[]>([])
-  const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null)
+  const [metrics, setMetrics] = useState<PerformanceMetricsData | null>(null)
   const [status, setStatus] = useState('Connecting...')
   const [isActive, setIsActive] = useState(false)
   const [selectedAction, setSelectedAction] = useState<ExecutionRecord | null>(null)
+  const [activeTab, setActiveTab] = useState('operator')
 
   useEffect(() => {
     const fetchRecords = async () => {
@@ -76,117 +81,83 @@ export default function App() {
     return () => clearInterval(interval)
   }, [])
 
-  return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
-      {/* Header */}
-      <header style={{ backgroundColor: '#fff', borderBottom: '1px solid #eee', padding: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>ClawTrade-BNB</h1>
-          <div style={{ fontSize: '14px', color: '#888', marginTop: '4px' }}>
-            Autonomous DeFi Trading Agent • Status: <span style={{ color: status === 'Live' ? '#4CAF50' : '#f44336' }}>● {status}</span>
-          </div>
-        </div>
-      </header>
+  const getLastDecisionTime = (): number | undefined => {
+    if (records.length > 0) {
+      return records[records.length - 1].timestamp
+    }
+    return undefined
+  }
 
-      {/* Main Content */}
-      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '20px' }}>
-          {/* Sidebar */}
-          <div>
-            <Operator onActivate={(profile) => {
+  const successCount = records.filter(r => r.status === 'success').length
+  const successRate = records.length > 0 ? (successCount / records.length) * 100 : 0
+
+  return (
+    <div className="app-container">
+      {/* SIDEBAR */}
+      <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+
+      {/* MAIN CONTENT */}
+      <div className="main-content">
+        {/* TOPBAR */}
+        <Topbar 
+          status={status} 
+          isActive={isActive}
+          lastDecisionTime={getLastDecisionTime()}
+        />
+
+        {/* MAIN PANEL */}
+        <div className="main-panel">
+          {/* OPERATOR SECTION (HERO CARD) */}
+          <Operator 
+            onActivate={(profile) => {
               setIsActive(true)
               console.log(`Agent activated with ${profile} profile`)
-            }} isActive={isActive} />
-            
-            <AgentTeam isActive={isActive} lastCycle={records[records.length - 1]} />
+            }} 
+            isActive={isActive}
+          />
 
-            {/* Metrics Cards */}
-            <div style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-              <h4 style={{ margin: '0 0 15px 0', fontSize: '14px', color: '#666', fontWeight: '600' }}>Performance</h4>
-              <div style={{ marginBottom: '15px' }}>
-                <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Total Harvested</div>
-                <div style={{ fontSize: '20px', fontWeight: '600' }}>${metrics?.totalHarvested?.toFixed(2) || '0.00'}</div>
-              </div>
-              <div style={{ marginBottom: '15px' }}>
-                <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Realized APR</div>
-                <div style={{ fontSize: '20px', fontWeight: '600', color: '#2196F3' }}>
-                  {typeof metrics?.realizedAPR === 'string' ? metrics.realizedAPR : (metrics?.realizedAPR as any)?.toFixed(2)}%
-                </div>
-              </div>
-              <div>
-                <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Total Actions</div>
-                <div style={{ fontSize: '20px', fontWeight: '600' }}>{records.length}</div>
-              </div>
-            </div>
-          </div>
+          {/* AGENT TEAM */}
+          <AgentTeam isActive={isActive} lastCycle={records[records.length - 1]} />
 
-          {/* Main Panel */}
-          <div>
-            <div style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-              <h3 style={{ margin: '0 0 20px 0', fontSize: '18px', fontWeight: '600' }}>Recent Actions</h3>
-              
-              {records.length === 0 ? (
-                <div style={{ padding: '40px', textAlign: 'center', color: '#999' }}>
-                  Waiting for first action...
-                </div>
-              ) : (
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                  <thead>
-                    <tr style={{ backgroundColor: '#f5f5f5', borderBottom: '1px solid #ddd' }}>
-                      <th style={{ padding: '12px', textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#666' }}>Time</th>
-                      <th style={{ padding: '12px', textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#666' }}>Action</th>
-                      <th style={{ padding: '12px', textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#666' }}>Status</th>
-                      <th style={{ padding: '12px', textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#666' }}>TX</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {records.map((r, i) => (
-                      <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
-                        <td style={{ padding: '12px', fontSize: '13px' }}>
-                          {new Date(r.timestamp * 1000).toLocaleTimeString()}
-                        </td>
-                        <td style={{ padding: '12px', fontSize: '13px', fontWeight: '500' }}>
-                          {r.action}
-                          {r.vault_id && <div style={{ fontSize: '11px', color: '#888' }}>{r.vault_id}</div>}
-                        </td>
-                        <td style={{ padding: '12px', fontSize: '13px' }}>
-                          <button
-                            onClick={() => setSelectedAction(r)}
-                            style={{
-                              padding: '4px 12px',
-                              backgroundColor: r.status === 'success' ? '#e8f5e9' : r.status === 'error' ? '#ffebee' : '#e3f2fd',
-                              color: r.status === 'success' ? '#2e7d32' : r.status === 'error' ? '#c62828' : '#1976d2',
-                              border: 'none',
-                              borderRadius: '4px',
-                              fontSize: '11px',
-                              fontWeight: '600',
-                              cursor: 'pointer'
-                            }}
-                          >
-                            {r.status === 'success' ? '✓ SUCCESS' : r.status === 'error' ? '✗ ERROR' : '→ SUGGESTED'}
-                            <div style={{ fontSize: '10px', marginTop: '2px' }}>Why?</div>
-                          </button>
-                        </td>
-                        <td style={{ padding: '12px', fontSize: '13px' }}>
-                          {r.tx_hash && r.tx_hash !== 'null' ? (
-                            <a href={`https://testnet.bscscan.com/tx/${r.tx_hash}`} target="_blank" rel="noreferrer" style={{ color: '#2196F3', textDecoration: 'none' }}>
-                              {String(r.tx_hash).slice(0, 10)}...
-                            </a>
-                          ) : '-'}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          </div>
+          {/* PERFORMANCE METRICS */}
+          {metrics && (
+            <PerformanceMetrics
+              totalHarvested={metrics.totalHarvested}
+              totalCompounded={metrics.totalCompounded}
+              realizedAPR={metrics.realizedAPR}
+              successRate={successRate}
+              totalActions={records.length}
+            />
+          )}
+
+          {/* ACTIVITY FEED */}
+          <ActivityFeed 
+            records={records} 
+            onSelectAction={setSelectedAction}
+          />
         </div>
-      </main>
+      </div>
 
-      {/* Explainability Drawer */}
+      {/* EXPLAINABILITY DRAWER */}
       {selectedAction && (
-        <Explainability action={selectedAction} onClose={() => setSelectedAction(null)} />
+        <div>
+          <div 
+            style={{
+              position: 'fixed',
+              left: 0,
+              top: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+              zIndex: 999
+            }}
+            onClick={() => setSelectedAction(null)}
+          ></div>
+          <Explainability 
+            action={selectedAction} 
+            onClose={() => setSelectedAction(null)}
+          />
+        </div>
       )}
     </div>
   )

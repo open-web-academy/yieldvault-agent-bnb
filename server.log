@@ -22,3 +22,4 @@ NotFoundError: Not Found
     at trimPrefix (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/router/index.js:342:13)
     at /home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/router/index.js:297:9
     at processParams (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/router/index.js:582:12)
+Killed
