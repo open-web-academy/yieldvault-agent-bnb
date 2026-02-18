@@ -15,13 +15,15 @@ export default function App() {
   useEffect(() => {
     const fetchRecords = async () => {
       try {
-        const res = await fetch('../execution-log.jsonl')
-        const text = await res.text()
-        const lines = text.trim().split('\n').filter(l => l)
-        setRecords(lines.map(l => JSON.parse(l)).slice(-10))
+        // Detect API endpoint: use window.location.origin if available, fallback to localhost
+        const apiBase = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3001'
+        const res = await fetch(`${apiBase}/api/logs`)
+        const data = await res.json()
+        setRecords(Array.isArray(data) ? data.slice(-10) : [])
         setStatus('Live')
-      } catch {
-        setStatus('Error reading log')
+      } catch (err) {
+        console.error('Error fetching logs:', err)
+        setStatus('Error connecting to API')
       }
     }
     fetchRecords()

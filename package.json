@@ -6,7 +6,10 @@
   "scripts": {
     "test": "node test.js",
     "start": "node index.js",
-    "verify": "node index.js --verify"
+    "verify": "node index.js --verify",
+    "dev": "node server.js",
+    "dev:dashboard": "cd dashboard && npm run dev",
+    "build:dashboard": "cd dashboard && npm install && npm run build"
   },
   "keywords": [
     "yield-farming",
@@ -22,6 +25,8 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "ethers": "^5.8.0"
+    "cors": "^2.8.6",
+    "ethers": "^5.8.0",
+    "express": "^5.2.1"
   }
 }
