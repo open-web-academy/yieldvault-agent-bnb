@@ -1,5 +1,5 @@
 
-> yield-farming-agent@1.1.0 dev
+> clawtrade-bnb@1.1.0 dev
 > node server.js
 
 
@@ -12,13 +12,35 @@
 ╚═══════════════════════════════════════════════════════════╝
   
 NotFoundError: Not Found
-    at createHttpError (/home/ubuntu/.openclaw/workspace/skills/yield-farming-agent/node_modules/send/index.js:861:12)
-    at SendStream.error (/home/ubuntu/.openclaw/workspace/skills/yield-farming-agent/node_modules/send/index.js:168:31)
-    at SendStream.pipe (/home/ubuntu/.openclaw/workspace/skills/yield-farming-agent/node_modules/send/index.js:468:14)
-    at sendfile (/home/ubuntu/.openclaw/workspace/skills/yield-farming-agent/node_modules/express/lib/response.js:1014:8)
-    at ServerResponse.sendFile (/home/ubuntu/.openclaw/workspace/skills/yield-farming-agent/node_modules/express/lib/response.js:411:3)
-    at /home/ubuntu/.openclaw/workspace/skills/yield-farming-agent/server.js:55:11
-    at Layer.handleRequest (/home/ubuntu/.openclaw/workspace/skills/yield-farming-agent/node_modules/router/lib/layer.js:152:17)
-    at trimPrefix (/home/ubuntu/.openclaw/workspace/skills/yield-farming-agent/node_modules/router/index.js:342:13)
-    at /home/ubuntu/.openclaw/workspace/skills/yield-farming-agent/node_modules/router/index.js:297:9
-    at processParams (/home/ubuntu/.openclaw/workspace/skills/yield-farming-agent/node_modules/router/index.js:582:12)
+    at createHttpError (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/send/index.js:861:12)
+    at SendStream.error (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/send/index.js:168:31)
+    at SendStream.pipe (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/send/index.js:468:14)
+    at sendfile (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/express/lib/response.js:1014:8)
+    at ServerResponse.sendFile (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/express/lib/response.js:411:3)
+    at /home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/server.js:55:11
+    at Layer.handleRequest (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/router/index.js:342:13)
+    at /home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/router/index.js:297:9
+    at processParams (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/router/index.js:582:12)
+NotFoundError: Not Found
+    at createHttpError (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/send/index.js:861:12)
+    at SendStream.error (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/send/index.js:168:31)
+    at SendStream.pipe (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/send/index.js:468:14)
+    at sendfile (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/express/lib/response.js:1014:8)
+    at ServerResponse.sendFile (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/express/lib/response.js:411:3)
+    at /home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/server.js:55:11
+    at Layer.handleRequest (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/router/index.js:342:13)
+    at /home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/router/index.js:297:9
+    at processParams (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/router/index.js:582:12)
+NotFoundError: Not Found
+    at createHttpError (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/send/index.js:861:12)
+    at SendStream.error (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/send/index.js:168:31)
+    at SendStream.pipe (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/send/index.js:468:14)
+    at sendfile (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/express/lib/response.js:1014:8)
+    at ServerResponse.sendFile (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/express/lib/response.js:411:3)
+    at /home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/server.js:55:11
+    at Layer.handleRequest (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/router/lib/layer.js:152:17)
+    at trimPrefix (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/router/index.js:342:13)
+    at /home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/router/index.js:297:9
+    at processParams (/home/ubuntu/.openclaw/workspace/skills/clawtrade-bnb/node_modules/router/index.js:582:12)
