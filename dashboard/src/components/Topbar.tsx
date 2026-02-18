@@ -1,4 +1,5 @@
 import React from 'react';
+import { IconActive } from '../icons';
 
 interface TopbarProps {
   status: string;
@@ -24,16 +25,16 @@ export function Topbar({ status, isActive, lastDecisionTime }: TopbarProps) {
     <div className="topbar">
       <div className="topbar-left">
         <div className={`topbar-badge ${isActive ? 'status-running' : 'status-paused'}`}>
-          <div className={`status-indicator ${!isActive ? 'paused' : ''}`}></div>
-          <span>{isActive ? '🟢 Autonomous Mode Active' : '🟡 Paused'}</span>
+          <IconActive size={8} color={isActive ? 'var(--success)' : 'var(--text-muted)'} />
+          <span>{isActive ? 'Autonomous Mode Active' : 'Paused'}</span>
         </div>
 
         <div className="topbar-badge" style={{ background: 'rgba(59, 130, 246, 0.1)', borderColor: 'rgba(59, 130, 246, 0.3)', color: 'var(--primary-light)' }}>
-          <span>🌐 BNB Testnet</span>
+          <span>BNB Testnet</span>
         </div>
 
         <div className="topbar-badge" style={{ background: 'rgba(245, 158, 11, 0.1)', borderColor: 'rgba(245, 158, 11, 0.3)', color: 'var(--warning)' }}>
-          <span>⏱️ Last Decision: {getLastDecisionText()}</span>
+          <span>Last Decision: {getLastDecisionText()}</span>
         </div>
       </div>
 

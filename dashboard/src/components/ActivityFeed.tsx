@@ -1,4 +1,5 @@
 import React from 'react';
+import { IconHarvest, IconCompound, IconRebalance, IconSuccess, IconError, IconTX, IconWhy } from '../icons';
 
 interface ExecutionRecord {
   timestamp: number;
@@ -24,12 +25,12 @@ export function ActivityFeed({ records, onSelectAction }: ActivityFeedProps) {
     return 'error';
   };
 
-  const getActionIcon = (category: string): string => {
+  const getActionIcon = (category: string) => {
     switch (category) {
-      case 'harvest': return '🌾';
-      case 'compound': return '📊';
-      case 'rebalance': return '⚖️';
-      default: return '⚠️';
+      case 'harvest': return IconHarvest;
+      case 'compound': return IconCompound;
+      case 'rebalance': return IconRebalance;
+      default: return IconError;
     }
   };
 
@@ -70,7 +71,7 @@ export function ActivityFeed({ records, onSelectAction }: ActivityFeedProps) {
       <div className="activity-feed">
         {records.map((record, i) => {
           const category = getActionCategory(record.action);
-          const icon = getActionIcon(category);
+          const Icon = getActionIcon(category);
           const vaultId = record.vault_id || record.vault || 'Unknown Vault';
 
           return (
@@ -81,7 +82,9 @@ export function ActivityFeed({ records, onSelectAction }: ActivityFeedProps) {
             >
               <div className="activity-header">
                 <div className="activity-action">
-                  <div className="activity-icon">{icon}</div>
+                  <div className="activity-icon">
+                    <Icon size={18} color="currentColor" />
+                  </div>
                   <div>
                     <div style={{ fontWeight: '600', marginBottom: '2px' }}>
                       {record.action}
@@ -95,15 +98,21 @@ export function ActivityFeed({ records, onSelectAction }: ActivityFeedProps) {
               </div>
 
               <div className="activity-details">
-                <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   {record.status === 'success' && (
-                    <span style={{ color: 'var(--success)' }}>✓ SUCCESS</span>
+                    <>
+                      <IconSuccess size={14} color="var(--success)" />
+                      <span style={{ color: 'var(--success)' }}>SUCCESS</span>
+                    </>
                   )}
                   {record.status === 'error' && (
-                    <span style={{ color: 'var(--error)' }}>✗ ERROR</span>
+                    <>
+                      <IconError size={14} color="var(--error)" />
+                      <span style={{ color: 'var(--error)' }}>ERROR</span>
+                    </>
                   )}
                   {!record.status && (
-                    <span style={{ color: 'var(--warning)' }}>→ SUGGESTED</span>
+                    <span style={{ color: 'var(--warning)' }}>SUGGESTED</span>
                   )}
                 </div>
                 {record.rewards_usd && (
@@ -124,8 +133,9 @@ export function ActivityFeed({ records, onSelectAction }: ActivityFeedProps) {
                       rel="noreferrer"
                       className="btn-secondary"
                       onClick={(e) => e.stopPropagation()}
+                      title="View transaction on BSCScan"
                     >
-                      📎 View TX
+                      <IconTX size={12} /> View TX
                     </a>
                   )}
                   <button
@@ -134,8 +144,9 @@ export function ActivityFeed({ records, onSelectAction }: ActivityFeedProps) {
                       e.stopPropagation();
                       onSelectAction(record);
                     }}
+                    title="View decision reasoning"
                   >
-                    🔍 Why?
+                    <IconWhy size={12} /> Why?
                   </button>
                 </div>
               </div>

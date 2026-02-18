@@ -1,4 +1,5 @@
 import React from 'react';
+import { IconClose, IconSuccess, IconLink } from '../icons';
 
 interface ExplainabilityProps {
   action: any;
@@ -15,7 +16,9 @@ export function Explainability({ action, onClose }: ExplainabilityProps) {
     <div className="explainability-drawer">
       <div className="drawer-header">
         <h3 className="drawer-title">Why This Decision</h3>
-        <button className="drawer-close" onClick={onClose}>×</button>
+        <button className="drawer-close" onClick={onClose}>
+          <IconClose size={20} />
+        </button>
       </div>
 
       <div className="drawer-content">
@@ -81,7 +84,10 @@ export function Explainability({ action, onClose }: ExplainabilityProps) {
             <div className="drawer-label">Rules Triggered</div>
             <div className="rules-list">
               {(decision.rules_triggered || []).map((rule: string, i: number) => (
-                <div key={i} className="rule-item">✓ {rule}</div>
+                <div key={i} className="rule-item">
+                  <IconSuccess size={12} color="var(--success)" style={{ marginRight: '6px' }} />
+                  {rule}
+                </div>
               ))}
             </div>
           </div>
@@ -141,9 +147,10 @@ export function Explainability({ action, onClose }: ExplainabilityProps) {
               target="_blank"
               rel="noreferrer"
               className="btn-secondary"
-              style={{ display: 'block', textAlign: 'center' }}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '10px' }}
             >
-              🔗 View on BSCScan
+              <IconLink size={14} />
+              View on BSCScan
             </a>
           </div>
         )}
