@@ -1,62 +1,66 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
+import { Operator } from './components/Operator';
+import { AgentTeam } from './components/AgentTeam';
+import { Explainability } from './components/Explainability';
 import './App.css';
 export default function App() {
     const [records, setRecords] = useState([]);
     const [metrics, setMetrics] = useState(null);
     const [status, setStatus] = useState('Connecting...');
+    const [isActive, setIsActive] = useState(false);
+    const [selectedAction, setSelectedAction] = useState(null);
     useEffect(() => {
         const fetchRecords = async () => {
             try {
                 const apiBase = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3001';
                 const res = await fetch(`${apiBase}/api/logs`);
                 const data = await res.json();
-                // Ensure data is valid
                 const validData = Array.isArray(data) ? data.filter((r) => r && r.action) : [];
                 setRecords(validData.slice(-20));
-                // Calculate metrics safely
                 if (validData.length > 0) {
                     const harvested = validData
-                        .filter((r) => r.action && typeof r.action === 'string' && r.action.includes('HARVEST'))
-                        .reduce((sum, r) => sum + (parseFloat(r.rewards_usd) || 0), 0);
+                        .filter((r) => r.action?.includes('HARVEST'))
+                        .reduce((sum, r) => sum + (parseFloat(String(r.rewards_usd)) || 0), 0);
                     const compounded = validData
-                        .filter((r) => r.action && typeof r.action === 'string' && r.action.includes('COMPOUND'))
-                        .reduce((sum, r) => sum + (parseFloat(r.rewards_usd) || 0), 0);
-                    const vaultsMap = validData.reduce((acc, r) => {
-                        const vaultId = r.vault_id || r.vault || 'unknown';
-                        if (!acc[vaultId])
-                            acc[vaultId] = { actions: 0, rewards: 0 };
-                        acc[vaultId].actions += 1;
-                        acc[vaultId].rewards += parseFloat(r.rewards_usd) || 0;
-                        return acc;
-                    }, {});
+                        .filter((r) => r.action?.includes('COMPOUND'))
+                        .reduce((sum, r) => sum + (parseFloat(String(r.rewards_usd)) || 0), 0);
                     setMetrics({
                         totalHarvested: harvested,
                         totalCompounded: compounded,
                         realizedAPR: compounded > 0 ? ((compounded / 1000) * 365 * 100).toFixed(2) : '0',
-                        vaults: vaultsMap
+                        vaults: validData.reduce((acc, r) => {
+                            const id = r.vault_id || r.vault || 'unknown';
+                            if (!acc[id])
+                                acc[id] = { actions: 0, rewards: 0 };
+                            acc[id].actions += 1;
+                            acc[id].rewards += parseFloat(String(r.rewards_usd)) || 0;
+                            return acc;
+                        }, {})
                     });
                 }
                 setStatus('Live');
             }
             catch (err) {
-                console.error('Error fetching logs:', err);
-                setStatus('Error connecting to API');
+                console.error('Error:', err);
+                setStatus('Error');
             }
         };
         fetchRecords();
         const interval = setInterval(fetchRecords, 30000);
         return () => clearInterval(interval);
     }, []);
-    return (_jsxs("div", { className: "app", style: { padding: '20px', fontFamily: 'system-ui, -apple-system, sans-serif' }, children: [_jsx("h1", { children: "\uD83C\uDF3E DeFi Yield Farming Agent" }), _jsxs("div", { style: { marginBottom: '20px', padding: '15px', backgroundColor: status === 'Live' ? '#e8f5e9' : '#fff3cd', borderRadius: '8px' }, children: [_jsx("strong", { children: "Status:" }), " ", status] }), metrics && (_jsxs("div", { style: { marginBottom: '30px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px' }, children: [_jsxs("div", { style: { padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '8px' }, children: [_jsx("div", { style: { fontSize: '12px', color: '#666' }, children: "Total Harvested" }), _jsxs("div", { style: { fontSize: '24px', fontWeight: 'bold' }, children: ["$", metrics.totalHarvested?.toFixed(2) || '0.00'] })] }), _jsxs("div", { style: { padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '8px' }, children: [_jsx("div", { style: { fontSize: '12px', color: '#666' }, children: "Total Compounded" }), _jsxs("div", { style: { fontSize: '24px', fontWeight: 'bold' }, children: ["$", metrics.totalCompounded?.toFixed(2) || '0.00'] })] }), _jsxs("div", { style: { padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '8px' }, children: [_jsx("div", { style: { fontSize: '12px', color: '#666' }, children: "Realized APR" }), _jsxs("div", { style: { fontSize: '24px', fontWeight: 'bold', color: '#2e7d32' }, children: [typeof metrics.realizedAPR === 'string' ? metrics.realizedAPR : metrics.realizedAPR.toFixed(2), "%"] })] })] })), _jsx("h2", { children: "Recent Actions (Last 20)" }), _jsxs("table", { style: { width: '100%', borderCollapse: 'collapse' }, children: [_jsx("thead", { children: _jsxs("tr", { style: { backgroundColor: '#f5f5f5' }, children: [_jsx("th", { style: { padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }, children: "Time" }), _jsx("th", { style: { padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }, children: "Vault" }), _jsx("th", { style: { padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }, children: "Action" }), _jsx("th", { style: { padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }, children: "Status" }), _jsx("th", { style: { padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }, children: "Rewards" }), _jsx("th", { style: { padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }, children: "TX Hash" })] }) }), _jsx("tbody", { children: records && records.length > 0 ? records.map((r, i) => (_jsxs("tr", { style: { borderBottom: '1px solid #eee' }, title: r?.error ? `Error: ${r.error}` : '', children: [_jsx("td", { style: { padding: '10px' }, children: r && r.timestamp ? new Date(r.timestamp * 1000).toLocaleTimeString() : '-' }), _jsx("td", { style: { padding: '10px' }, title: r?.vault_name || '', children: r && (r.vault_id || r.vault) ? String(r.vault_id || r.vault).slice(0, 25) : 'unknown' }), _jsx("td", { style: { padding: '10px' }, children: _jsx("strong", { style: {
-                                            color: r && r.action && typeof r.action === 'string' && r.action.includes('COMPOUND') ? '#2e7d32' :
-                                                r && r.action && typeof r.action === 'string' && r.action.includes('HARVEST') ? '#1976d2' : '#666'
-                                        }, children: r?.action || 'UNKNOWN' }) }), _jsxs("td", { style: { padding: '10px' }, children: [_jsx("span", { style: {
-                                                backgroundColor: r?.status === 'error' ? '#ffebee' : '#e8f5e9',
-                                                color: r?.status === 'error' ? '#c62828' : '#2e7d32',
-                                                padding: '4px 8px',
-                                                borderRadius: '4px',
-                                                fontSize: '12px',
-                                                fontWeight: 'bold'
-                                            }, children: r?.status === 'error' ? '❌ ERROR' : r?.status === 'success' ? '✅ SUCCESS' : r?.status || '—' }), r?.error && _jsxs("div", { style: { fontSize: '10px', color: '#c62828', marginTop: '2px' }, children: [r.error.slice(0, 40), "..."] })] }), _jsx("td", { style: { padding: '10px' }, children: r && r.rewards_usd ? '$' + parseFloat(String(r.rewards_usd)).toFixed(2) : '-' }), _jsx("td", { style: { padding: '10px' }, children: r && r.tx_hash && String(r.tx_hash) !== 'null' && String(r.tx_hash) !== '0x' ? (_jsxs("a", { href: `https://testnet.bscscan.com/tx/${r.tx_hash}`, target: "_blank", rel: "noopener noreferrer", style: { color: '#0066cc', textDecoration: 'none', fontSize: '12px' }, children: [String(r.tx_hash).slice(0, 10), "..."] })) : (_jsx("span", { style: { color: '#999' }, children: "-" })) })] }, i))) : (_jsx("tr", { children: _jsx("td", { colSpan: 6, style: { padding: '20px', textAlign: 'center', color: '#999' }, children: "No logs available yet" }) })) })] })] }));
+    return (_jsxs("div", { style: { minHeight: '100vh', backgroundColor: '#f5f5f5' }, children: [_jsx("header", { style: { backgroundColor: '#fff', borderBottom: '1px solid #eee', padding: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }, children: _jsxs("div", { style: { maxWidth: '1200px', margin: '0 auto' }, children: [_jsx("h1", { style: { margin: 0, fontSize: '24px', fontWeight: '600' }, children: "ClawTrade-BNB" }), _jsxs("div", { style: { fontSize: '14px', color: '#888', marginTop: '4px' }, children: ["Autonomous DeFi Trading Agent \u2022 Status: ", _jsxs("span", { style: { color: status === 'Live' ? '#4CAF50' : '#f44336' }, children: ["\u25CF ", status] })] })] }) }), _jsx("main", { style: { maxWidth: '1200px', margin: '0 auto', padding: '20px' }, children: _jsxs("div", { style: { display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '20px' }, children: [_jsxs("div", { children: [_jsx(Operator, { onActivate: (profile) => {
+                                        setIsActive(true);
+                                        console.log(`Agent activated with ${profile} profile`);
+                                    }, isActive: isActive }), _jsx(AgentTeam, { isActive: isActive, lastCycle: records[records.length - 1] }), _jsxs("div", { style: { padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }, children: [_jsx("h4", { style: { margin: '0 0 15px 0', fontSize: '14px', color: '#666', fontWeight: '600' }, children: "Performance" }), _jsxs("div", { style: { marginBottom: '15px' }, children: [_jsx("div", { style: { fontSize: '12px', color: '#888', marginBottom: '4px' }, children: "Total Harvested" }), _jsxs("div", { style: { fontSize: '20px', fontWeight: '600' }, children: ["$", metrics?.totalHarvested?.toFixed(2) || '0.00'] })] }), _jsxs("div", { style: { marginBottom: '15px' }, children: [_jsx("div", { style: { fontSize: '12px', color: '#888', marginBottom: '4px' }, children: "Realized APR" }), _jsxs("div", { style: { fontSize: '20px', fontWeight: '600', color: '#2196F3' }, children: [typeof metrics?.realizedAPR === 'string' ? metrics.realizedAPR : metrics?.realizedAPR?.toFixed(2), "%"] })] }), _jsxs("div", { children: [_jsx("div", { style: { fontSize: '12px', color: '#888', marginBottom: '4px' }, children: "Total Actions" }), _jsx("div", { style: { fontSize: '20px', fontWeight: '600' }, children: records.length })] })] })] }), _jsx("div", { children: _jsxs("div", { style: { padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }, children: [_jsx("h3", { style: { margin: '0 0 20px 0', fontSize: '18px', fontWeight: '600' }, children: "Recent Actions" }), records.length === 0 ? (_jsx("div", { style: { padding: '40px', textAlign: 'center', color: '#999' }, children: "Waiting for first action..." })) : (_jsxs("table", { style: { width: '100%', borderCollapse: 'collapse' }, children: [_jsx("thead", { children: _jsxs("tr", { style: { backgroundColor: '#f5f5f5', borderBottom: '1px solid #ddd' }, children: [_jsx("th", { style: { padding: '12px', textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#666' }, children: "Time" }), _jsx("th", { style: { padding: '12px', textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#666' }, children: "Action" }), _jsx("th", { style: { padding: '12px', textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#666' }, children: "Status" }), _jsx("th", { style: { padding: '12px', textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#666' }, children: "TX" })] }) }), _jsx("tbody", { children: records.map((r, i) => (_jsxs("tr", { style: { borderBottom: '1px solid #eee' }, children: [_jsx("td", { style: { padding: '12px', fontSize: '13px' }, children: new Date(r.timestamp * 1000).toLocaleTimeString() }), _jsxs("td", { style: { padding: '12px', fontSize: '13px', fontWeight: '500' }, children: [r.action, r.vault_id && _jsx("div", { style: { fontSize: '11px', color: '#888' }, children: r.vault_id })] }), _jsx("td", { style: { padding: '12px', fontSize: '13px' }, children: _jsxs("button", { onClick: () => setSelectedAction(r), style: {
+                                                                    padding: '4px 12px',
+                                                                    backgroundColor: r.status === 'success' ? '#e8f5e9' : r.status === 'error' ? '#ffebee' : '#e3f2fd',
+                                                                    color: r.status === 'success' ? '#2e7d32' : r.status === 'error' ? '#c62828' : '#1976d2',
+                                                                    border: 'none',
+                                                                    borderRadius: '4px',
+                                                                    fontSize: '11px',
+                                                                    fontWeight: '600',
+                                                                    cursor: 'pointer'
+                                                                }, children: [r.status === 'success' ? '✓ SUCCESS' : r.status === 'error' ? '✗ ERROR' : '→ SUGGESTED', _jsx("div", { style: { fontSize: '10px', marginTop: '2px' }, children: "Why?" })] }) }), _jsx("td", { style: { padding: '12px', fontSize: '13px' }, children: r.tx_hash && r.tx_hash !== 'null' ? (_jsxs("a", { href: `https://testnet.bscscan.com/tx/${r.tx_hash}`, target: "_blank", rel: "noreferrer", style: { color: '#2196F3', textDecoration: 'none' }, children: [String(r.tx_hash).slice(0, 10), "..."] })) : '-' })] }, i))) })] }))] }) })] }) }), selectedAction && (_jsx(Explainability, { action: selectedAction, onClose: () => setSelectedAction(null) }))] }));
 }

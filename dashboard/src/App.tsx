@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react'
+import { Operator } from './components/Operator'
+import { AgentTeam } from './components/AgentTeam'
+import { Explainability } from './components/Explainability'
 import './App.css'
 
 interface ExecutionRecord {
@@ -7,15 +10,13 @@ interface ExecutionRecord {
   vault_id?: string
   vault?: string
   vault_name?: string
-  state_hash?: string
   tx_hash?: string
   confidence?: number
-  net_apr?: number
   rewards_usd?: number | string
   cycle?: number
   status?: string
   error?: string
-  gas_used?: string
+  decision?: any
 }
 
 interface PerformanceMetrics {
@@ -29,6 +30,8 @@ export default function App() {
   const [records, setRecords] = useState<ExecutionRecord[]>([])
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null)
   const [status, setStatus] = useState('Connecting...')
+  const [isActive, setIsActive] = useState(false)
+  const [selectedAction, setSelectedAction] = useState<ExecutionRecord | null>(null)
 
   useEffect(() => {
     const fetchRecords = async () => {
@@ -37,39 +40,35 @@ export default function App() {
         const res = await fetch(`${apiBase}/api/logs`)
         const data = await res.json()
         
-        // Ensure data is valid
         const validData = Array.isArray(data) ? data.filter((r: any) => r && r.action) : []
         setRecords(validData.slice(-20))
         
-        // Calculate metrics safely
         if (validData.length > 0) {
           const harvested = validData
-            .filter((r: any) => r.action && typeof r.action === 'string' && r.action.includes('HARVEST'))
-            .reduce((sum: number, r: any) => sum + (parseFloat(r.rewards_usd) || 0), 0)
+            .filter((r: any) => r.action?.includes('HARVEST'))
+            .reduce((sum: number, r: any) => sum + (parseFloat(String(r.rewards_usd)) || 0), 0)
           
           const compounded = validData
-            .filter((r: any) => r.action && typeof r.action === 'string' && r.action.includes('COMPOUND'))
-            .reduce((sum: number, r: any) => sum + (parseFloat(r.rewards_usd) || 0), 0)
-          
-          const vaultsMap = validData.reduce((acc: any, r: any) => {
-            const vaultId = r.vault_id || r.vault || 'unknown'
-            if (!acc[vaultId]) acc[vaultId] = { actions: 0, rewards: 0 }
-            acc[vaultId].actions += 1
-            acc[vaultId].rewards += parseFloat(r.rewards_usd) || 0
-            return acc
-          }, {})
+            .filter((r: any) => r.action?.includes('COMPOUND'))
+            .reduce((sum: number, r: any) => sum + (parseFloat(String(r.rewards_usd)) || 0), 0)
           
           setMetrics({
             totalHarvested: harvested,
             totalCompounded: compounded,
             realizedAPR: compounded > 0 ? ((compounded / 1000) * 365 * 100).toFixed(2) : '0',
-            vaults: vaultsMap
+            vaults: validData.reduce((acc: any, r: any) => {
+              const id = r.vault_id || r.vault || 'unknown'
+              if (!acc[id]) acc[id] = { actions: 0, rewards: 0 }
+              acc[id].actions += 1
+              acc[id].rewards += parseFloat(String(r.rewards_usd)) || 0
+              return acc
+            }, {})
           })
         }
         setStatus('Live')
       } catch (err) {
-        console.error('Error fetching logs:', err)
-        setStatus('Error connecting to API')
+        console.error('Error:', err)
+        setStatus('Error')
       }
     }
     fetchRecords()
@@ -78,98 +77,117 @@ export default function App() {
   }, [])
 
   return (
-    <div className="app" style={{ padding: '20px', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-      <h1>🌾 DeFi Yield Farming Agent</h1>
-      <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: status === 'Live' ? '#e8f5e9' : '#fff3cd', borderRadius: '8px' }}>
-        <strong>Status:</strong> {status}
-      </div>
-
-      {metrics && (
-        <div style={{ marginBottom: '30px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px' }}>
-          <div style={{ padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
-            <div style={{ fontSize: '12px', color: '#666' }}>Total Harvested</div>
-            <div style={{ fontSize: '24px', fontWeight: 'bold' }}>${metrics.totalHarvested?.toFixed(2) || '0.00'}</div>
-          </div>
-          <div style={{ padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
-            <div style={{ fontSize: '12px', color: '#666' }}>Total Compounded</div>
-            <div style={{ fontSize: '24px', fontWeight: 'bold' }}>${metrics.totalCompounded?.toFixed(2) || '0.00'}</div>
-          </div>
-          <div style={{ padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
-            <div style={{ fontSize: '12px', color: '#666' }}>Realized APR</div>
-            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#2e7d32' }}>{typeof metrics.realizedAPR === 'string' ? metrics.realizedAPR : (metrics.realizedAPR as any).toFixed(2)}%</div>
+    <div style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
+      {/* Header */}
+      <header style={{ backgroundColor: '#fff', borderBottom: '1px solid #eee', padding: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>ClawTrade-BNB</h1>
+          <div style={{ fontSize: '14px', color: '#888', marginTop: '4px' }}>
+            Autonomous DeFi Trading Agent • Status: <span style={{ color: status === 'Live' ? '#4CAF50' : '#f44336' }}>● {status}</span>
           </div>
         </div>
-      )}
+      </header>
 
-      <h2>Recent Actions (Last 20)</h2>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr style={{ backgroundColor: '#f5f5f5' }}>
-            <th style={{ padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Time</th>
-            <th style={{ padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Vault</th>
-            <th style={{ padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Action</th>
-            <th style={{ padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Status</th>
-            <th style={{ padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Rewards</th>
-            <th style={{ padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>TX Hash</th>
-          </tr>
-        </thead>
-        <tbody>
-          {records && records.length > 0 ? records.map((r, i) => (
-            <tr key={i} style={{ borderBottom: '1px solid #eee' }} title={r?.error ? `Error: ${r.error}` : ''}>
-              <td style={{ padding: '10px' }}>
-                {r && r.timestamp ? new Date(r.timestamp * 1000).toLocaleTimeString() : '-'}
-              </td>
-              <td style={{ padding: '10px' }} title={r?.vault_name || ''}>
-                {r && (r.vault_id || r.vault) ? String(r.vault_id || r.vault).slice(0, 25) : 'unknown'}
-              </td>
-              <td style={{ padding: '10px' }}>
-                <strong style={{ 
-                  color: r && r.action && typeof r.action === 'string' && r.action.includes('COMPOUND') ? '#2e7d32' : 
-                         r && r.action && typeof r.action === 'string' && r.action.includes('HARVEST') ? '#1976d2' : '#666' 
-                }}>
-                  {r?.action || 'UNKNOWN'}
-                </strong>
-              </td>
-              <td style={{ padding: '10px' }}>
-                <span style={{
-                  backgroundColor: r?.status === 'error' ? '#ffebee' : '#e8f5e9',
-                  color: r?.status === 'error' ? '#c62828' : '#2e7d32',
-                  padding: '4px 8px',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                  fontWeight: 'bold'
-                }}>
-                  {r?.status === 'error' ? '❌ ERROR' : r?.status === 'success' ? '✅ SUCCESS' : r?.status || '—'}
-                </span>
-                {r?.error && <div style={{ fontSize: '10px', color: '#c62828', marginTop: '2px' }}>{r.error.slice(0, 40)}...</div>}
-              </td>
-              <td style={{ padding: '10px' }}>
-                {r && r.rewards_usd ? '$' + parseFloat(String(r.rewards_usd)).toFixed(2) : '-'}
-              </td>
-              <td style={{ padding: '10px' }}>
-                {r && r.tx_hash && String(r.tx_hash) !== 'null' && String(r.tx_hash) !== '0x' ? (
-                  <a 
-                    href={`https://testnet.bscscan.com/tx/${r.tx_hash}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: '#0066cc', textDecoration: 'none', fontSize: '12px' }}
-                  >
-                    {String(r.tx_hash).slice(0, 10)}...
-                  </a>
-                ) : (
-                  <span style={{ color: '#999' }}>-</span>
-                )}
-              </td>
-            </tr>
-          )) : (
-            <tr>
-              <td colSpan={6} style={{ padding: '20px', textAlign: 'center', color: '#999' }}>
-                No logs available yet
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      {/* Main Content */}
+      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '20px' }}>
+          {/* Sidebar */}
+          <div>
+            <Operator onActivate={(profile) => {
+              setIsActive(true)
+              console.log(`Agent activated with ${profile} profile`)
+            }} isActive={isActive} />
+            
+            <AgentTeam isActive={isActive} lastCycle={records[records.length - 1]} />
+
+            {/* Metrics Cards */}
+            <div style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+              <h4 style={{ margin: '0 0 15px 0', fontSize: '14px', color: '#666', fontWeight: '600' }}>Performance</h4>
+              <div style={{ marginBottom: '15px' }}>
+                <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Total Harvested</div>
+                <div style={{ fontSize: '20px', fontWeight: '600' }}>${metrics?.totalHarvested?.toFixed(2) || '0.00'}</div>
+              </div>
+              <div style={{ marginBottom: '15px' }}>
+                <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Realized APR</div>
+                <div style={{ fontSize: '20px', fontWeight: '600', color: '#2196F3' }}>
+                  {typeof metrics?.realizedAPR === 'string' ? metrics.realizedAPR : (metrics?.realizedAPR as any)?.toFixed(2)}%
+                </div>
+              </div>
+              <div>
+                <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Total Actions</div>
+                <div style={{ fontSize: '20px', fontWeight: '600' }}>{records.length}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Panel */}
+          <div>
+            <div style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+              <h3 style={{ margin: '0 0 20px 0', fontSize: '18px', fontWeight: '600' }}>Recent Actions</h3>
+              
+              {records.length === 0 ? (
+                <div style={{ padding: '40px', textAlign: 'center', color: '#999' }}>
+                  Waiting for first action...
+                </div>
+              ) : (
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ backgroundColor: '#f5f5f5', borderBottom: '1px solid #ddd' }}>
+                      <th style={{ padding: '12px', textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#666' }}>Time</th>
+                      <th style={{ padding: '12px', textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#666' }}>Action</th>
+                      <th style={{ padding: '12px', textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#666' }}>Status</th>
+                      <th style={{ padding: '12px', textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#666' }}>TX</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {records.map((r, i) => (
+                      <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
+                        <td style={{ padding: '12px', fontSize: '13px' }}>
+                          {new Date(r.timestamp * 1000).toLocaleTimeString()}
+                        </td>
+                        <td style={{ padding: '12px', fontSize: '13px', fontWeight: '500' }}>
+                          {r.action}
+                          {r.vault_id && <div style={{ fontSize: '11px', color: '#888' }}>{r.vault_id}</div>}
+                        </td>
+                        <td style={{ padding: '12px', fontSize: '13px' }}>
+                          <button
+                            onClick={() => setSelectedAction(r)}
+                            style={{
+                              padding: '4px 12px',
+                              backgroundColor: r.status === 'success' ? '#e8f5e9' : r.status === 'error' ? '#ffebee' : '#e3f2fd',
+                              color: r.status === 'success' ? '#2e7d32' : r.status === 'error' ? '#c62828' : '#1976d2',
+                              border: 'none',
+                              borderRadius: '4px',
+                              fontSize: '11px',
+                              fontWeight: '600',
+                              cursor: 'pointer'
+                            }}
+                          >
+                            {r.status === 'success' ? '✓ SUCCESS' : r.status === 'error' ? '✗ ERROR' : '→ SUGGESTED'}
+                            <div style={{ fontSize: '10px', marginTop: '2px' }}>Why?</div>
+                          </button>
+                        </td>
+                        <td style={{ padding: '12px', fontSize: '13px' }}>
+                          {r.tx_hash && r.tx_hash !== 'null' ? (
+                            <a href={`https://testnet.bscscan.com/tx/${r.tx_hash}`} target="_blank" rel="noreferrer" style={{ color: '#2196F3', textDecoration: 'none' }}>
+                              {String(r.tx_hash).slice(0, 10)}...
+                            </a>
+                          ) : '-'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Explainability Drawer */}
+      {selectedAction && (
+        <Explainability action={selectedAction} onClose={() => setSelectedAction(null)} />
+      )}
     </div>
   )
 }
