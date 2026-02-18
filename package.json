@@ -1,32 +1,63 @@
 {
   "name": "yield-farming-agent",
-  "version": "1.0.0",
-  "description": "Autonomous deterministic decision engine for cross-vault yield farming optimization",
-  "main": "index.js",
+  "version": "1.1.0",
+  "description": "Autonomous DeFi yield farming agent with 3 intelligent strategies, network switching, performance analytics, and self-improving reinforced learning for BNB Chain",
+  "main": "strategy-scheduler.js",
   "scripts": {
-    "test": "node test.js",
-    "start": "node index.js",
-    "verify": "node index.js --verify",
+    "start": "node strategy-scheduler.js",
+    "strategy": "node strategy-scheduler.js",
     "dev": "node server.js",
     "dev:dashboard": "cd dashboard && npm run dev",
-    "build:dashboard": "cd dashboard && npm install && npm run build"
+    "build:dashboard": "cd dashboard && npm install && npm run build",
+    "cli": "node agent-cli.js",
+    "cli:interactive": "node agent-cli.js",
+    "network": "node agent-cli.js network",
+    "perf": "node agent-cli.js perf",
+    "learn": "node agent-cli.js learn",
+    "verify": "node -e \"require('./defi-strategy-engine.js'); console.log('✅ All modules loaded')\"",
+    "test": "node test.js",
+    "test:live": "node test.live.js"
   },
   "keywords": [
     "yield-farming",
     "defi",
+    "autonomous-agent",
+    "strategy-engine",
+    "reinforced-learning",
+    "network-switching",
+    "bnb-chain",
+    "bsc",
     "optimization",
-    "autonomous",
-    "deterministic",
-    "agent"
+    "deterministic"
   ],
-  "author": "Your Name",
+  "author": "Open Web Academy",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/open-web-academy/yieldvault-agent-bnb.git"
+  },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
   },
   "dependencies": {
     "cors": "^2.8.6",
     "ethers": "^5.8.0",
     "express": "^5.2.1"
+  },
+  "devDependencies": {},
+  "clayhub": {
+    "skillId": "yieldvault-agent",
+    "category": "defi",
+    "difficulty": "advanced",
+    "tags": [
+      "yield-farming",
+      "autonomous-agent",
+      "smart-contracts",
+      "bnb-chain",
+      "multi-strategy",
+      "reinforced-learning"
+    ],
+    "version": "1.1.0"
   }
 }
