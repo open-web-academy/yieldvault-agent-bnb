@@ -35,6 +35,9 @@ app.get('/api/logs', (req, res) => {
             tx_hash: parsed.tx_hash || '',
             rewards_usd: parsed.rewards_usd || parsed.amount_tokens || 0,
             confidence: parsed.confidence || 0,
+            status: parsed.status || 'unknown',
+            error: parsed.error || '',
+            gas_used: parsed.gas_used || '',
             ...parsed
           };
         } catch (e) {

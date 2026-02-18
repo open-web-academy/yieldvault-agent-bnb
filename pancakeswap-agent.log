@@ -1,0 +1,24 @@
+
+╔═══════════════════════════════════════════════════════════╗
+║  PancakeSwap Autonomous Agent                             ║
+╠═══════════════════════════════════════════════════════════╣
+║  Pool: WBNB-LINK (0x51a92448...)
+║  Strategy: Monitor APR & execute profitable swaps         ║
+║  Cycle Interval: 60 seconds                               ║
+╚═══════════════════════════════════════════════════════════╝
+  
+
+════════════════════════════════════════════════════════════
+Cycle #1 @ 2026-02-18T17:19:20.655Z
+════════════════════════════════════════════════════════════
+Fatal error: ReferenceError: analyzePool is not defined
+    at executeCycle (/home/ubuntu/.openclaw/workspace/skills/yield-farming-agent/pancakeswap-agent.js:120:20)
+    at start (/home/ubuntu/.openclaw/workspace/skills/yield-farming-agent/pancakeswap-agent.js:168:9)
+    at Object.<anonymous> (/home/ubuntu/.openclaw/workspace/skills/yield-farming-agent/pancakeswap-agent.js:182:3)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)

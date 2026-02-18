@@ -33,7 +33,7 @@ const SWAP_AMOUNT = 0.01; // 0.01 BNB per trade
 
 let cycleCount = 0;
 
-async function analyzePpool() {
+async function analyzePool() {
   try {
     const reader = new PancakeSwapReader(POOL_ADDRESS);
     await reader.initialize();

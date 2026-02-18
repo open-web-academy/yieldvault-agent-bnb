@@ -1,0 +1,658 @@
+
+╔═══════════════════════════════════════════════════════════════════╗
+║  DeFi Strategy Scheduler - LIVE                                   ║
+╠═══════════════════════════════════════════════════════════════════╣
+║  Engine: BNB Testnet
+║  Wallet: 6d816d363a...
+║  RPC: https://bsc-testnet.publicnode.com...
+║  Strategies: Compound Yield, Rebalance, Dynamic Harvest           ║
+║  Cycle Interval: 60s                           ║
+║  On-Chain Logging: ENABLED                                        ║
+╚═══════════════════════════════════════════════════════════════════╝
+  
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #1
+2026-02-18T18:21:47.012Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:21:47.013Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #1 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #2
+2026-02-18T18:22:48.034Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:22:48.034Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #2 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #3
+2026-02-18T18:23:48.050Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:23:48.050Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #3 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #4
+2026-02-18T18:24:48.066Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:24:48.066Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #4 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #5
+2026-02-18T18:25:48.074Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:25:48.074Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #5 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #6
+2026-02-18T18:26:48.090Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:26:48.090Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #6 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #7
+2026-02-18T18:27:48.114Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:27:48.114Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #7 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #8
+2026-02-18T18:28:48.122Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:28:48.122Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #8 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #9
+2026-02-18T18:29:48.148Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:29:48.149Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #9 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #10
+2026-02-18T18:30:48.203Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:30:48.203Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #10 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #11
+2026-02-18T18:31:48.242Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:31:48.242Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #11 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #12
+2026-02-18T18:32:48.297Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:32:48.297Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #12 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #13
+2026-02-18T18:33:48.351Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:33:48.351Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #13 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #14
+2026-02-18T18:34:48.402Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:34:48.402Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #14 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #15
+2026-02-18T18:35:48.442Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:35:48.442Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #15 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #16
+2026-02-18T18:36:48.474Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:36:48.474Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #16 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #17
+2026-02-18T18:37:48.506Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:37:48.506Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #17 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #18
+2026-02-18T18:38:48.538Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:38:48.538Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #18 failed: Cannot read properties of undefined (reading 'status')
+
+══════════════════════════════════════════════════════════════════════
+Strategy Execution Cycle #19
+2026-02-18T18:39:48.570Z
+══════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+DeFi Strategy Engine - REAL Transactions
+2026-02-18T18:39:48.570Z
+════════════════════════════════════════════════════════════
+
+🔄 Executing Compound Yield Strategy...
+
+📊 vault_eth_staking_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_high_risk_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+📊 vault_link_oracle_001
+  Pending yield: 0.000000 tokens
+  ⏸️  Yield too low, skipping
+
+🌾 Executing Harvest Strategy...
+
+📊 Cycle Summary:
+  Compound actions: 0
+  Harvest actions: 0
+  Total Harvested: 0.000000
+  Total Compounded: 0.000000
+
+❌ Cycle #19 failed: Cannot read properties of undefined (reading 'status')

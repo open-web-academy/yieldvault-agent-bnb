@@ -13,6 +13,9 @@ interface ExecutionRecord {
   net_apr?: number
   rewards_usd?: number | string
   cycle?: number
+  status?: string
+  error?: string
+  gas_used?: string
 }
 
 interface PerformanceMetrics {
@@ -105,13 +108,14 @@ export default function App() {
             <th style={{ padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Time</th>
             <th style={{ padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Vault</th>
             <th style={{ padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Action</th>
+            <th style={{ padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Status</th>
             <th style={{ padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Rewards</th>
             <th style={{ padding: '10px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>TX Hash</th>
           </tr>
         </thead>
         <tbody>
           {records && records.length > 0 ? records.map((r, i) => (
-            <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
+            <tr key={i} style={{ borderBottom: '1px solid #eee' }} title={r?.error ? `Error: ${r.error}` : ''}>
               <td style={{ padding: '10px' }}>
                 {r && r.timestamp ? new Date(r.timestamp * 1000).toLocaleTimeString() : '-'}
               </td>
@@ -125,6 +129,19 @@ export default function App() {
                 }}>
                   {r?.action || 'UNKNOWN'}
                 </strong>
+              </td>
+              <td style={{ padding: '10px' }}>
+                <span style={{
+                  backgroundColor: r?.status === 'error' ? '#ffebee' : '#e8f5e9',
+                  color: r?.status === 'error' ? '#c62828' : '#2e7d32',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  fontSize: '12px',
+                  fontWeight: 'bold'
+                }}>
+                  {r?.status === 'error' ? '❌ ERROR' : r?.status === 'success' ? '✅ SUCCESS' : r?.status || '—'}
+                </span>
+                {r?.error && <div style={{ fontSize: '10px', color: '#c62828', marginTop: '2px' }}>{r.error.slice(0, 40)}...</div>}
               </td>
               <td style={{ padding: '10px' }}>
                 {r && r.rewards_usd ? '$' + parseFloat(String(r.rewards_usd)).toFixed(2) : '-'}
@@ -146,7 +163,7 @@ export default function App() {
             </tr>
           )) : (
             <tr>
-              <td colSpan={5} style={{ padding: '20px', textAlign: 'center', color: '#999' }}>
+              <td colSpan={6} style={{ padding: '20px', textAlign: 'center', color: '#999' }}>
                 No logs available yet
               </td>
             </tr>
