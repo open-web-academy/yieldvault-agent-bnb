@@ -4,13 +4,14 @@ import './App.css'
 interface ExecutionRecord {
   timestamp: number
   action: string
-  vault_id: string
+  vault_id?: string
+  vault?: string
   vault_name?: string
-  state_hash: string
+  state_hash?: string
   tx_hash?: string
   confidence?: number
   net_apr?: number
-  rewards_usd?: number
+  rewards_usd?: number | string
   cycle?: number
 }
 
@@ -32,22 +33,34 @@ export default function App() {
         const apiBase = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3001'
         const res = await fetch(`${apiBase}/api/logs`)
         const data = await res.json()
-        setRecords(Array.isArray(data) ? data.slice(-20) : [])
         
-        // Calculate metrics
-        if (Array.isArray(data) && data.length > 0) {
-          const harvested = data.filter((r: any) => r.action?.includes('HARVEST')).reduce((sum: number, r: any) => sum + (r.rewards_usd || 0), 0)
-          const compounded = data.filter((r: any) => r.action?.includes('COMPOUND')).reduce((sum: number, r: any) => sum + (r.rewards_usd || 0), 0)
+        // Ensure data is valid
+        const validData = Array.isArray(data) ? data.filter((r: any) => r && r.action) : []
+        setRecords(validData.slice(-20))
+        
+        // Calculate metrics safely
+        if (validData.length > 0) {
+          const harvested = validData
+            .filter((r: any) => r.action && typeof r.action === 'string' && r.action.includes('HARVEST'))
+            .reduce((sum: number, r: any) => sum + (parseFloat(r.rewards_usd) || 0), 0)
+          
+          const compounded = validData
+            .filter((r: any) => r.action && typeof r.action === 'string' && r.action.includes('COMPOUND'))
+            .reduce((sum: number, r: any) => sum + (parseFloat(r.rewards_usd) || 0), 0)
+          
+          const vaultsMap = validData.reduce((acc: any, r: any) => {
+            const vaultId = r.vault_id || r.vault || 'unknown'
+            if (!acc[vaultId]) acc[vaultId] = { actions: 0, rewards: 0 }
+            acc[vaultId].actions += 1
+            acc[vaultId].rewards += parseFloat(r.rewards_usd) || 0
+            return acc
+          }, {})
+          
           setMetrics({
             totalHarvested: harvested,
             totalCompounded: compounded,
             realizedAPR: compounded > 0 ? ((compounded / 1000) * 365 * 100).toFixed(2) : '0',
-            vaults: data.reduce((acc: any, r: any) => {
-              if (!acc[r.vault_id]) acc[r.vault_id] = { actions: 0, rewards: 0 }
-              acc[r.vault_id].actions += 1
-              acc[r.vault_id].rewards += r.rewards_usd || 0
-              return acc
-            }, {})
+            vaults: vaultsMap
           })
         }
         setStatus('Live')
@@ -97,28 +110,47 @@ export default function App() {
           </tr>
         </thead>
         <tbody>
-          {records.map((r, i) => (
+          {records && records.length > 0 ? records.map((r, i) => (
             <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
-              <td style={{ padding: '10px' }}>{new Date(r.timestamp * 1000).toLocaleTimeString()}</td>
-              <td style={{ padding: '10px' }} title={r.vault_name}>{r.vault_id.slice(0, 25)}</td>
-              <td style={{ padding: '10px' }}><strong style={{ color: r.action?.includes('COMPOUND') ? '#2e7d32' : r.action?.includes('HARVEST') ? '#1976d2' : '#666' }}>{r.action}</strong></td>
-              <td style={{ padding: '10px' }}>{r.rewards_usd ? '$' + r.rewards_usd.toFixed(2) : '-'}</td>
               <td style={{ padding: '10px' }}>
-                {r.tx_hash && r.tx_hash !== 'null' ? (
+                {r && r.timestamp ? new Date(r.timestamp * 1000).toLocaleTimeString() : '-'}
+              </td>
+              <td style={{ padding: '10px' }} title={r?.vault_name || ''}>
+                {r && (r.vault_id || r.vault) ? String(r.vault_id || r.vault).slice(0, 25) : 'unknown'}
+              </td>
+              <td style={{ padding: '10px' }}>
+                <strong style={{ 
+                  color: r && r.action && typeof r.action === 'string' && r.action.includes('COMPOUND') ? '#2e7d32' : 
+                         r && r.action && typeof r.action === 'string' && r.action.includes('HARVEST') ? '#1976d2' : '#666' 
+                }}>
+                  {r?.action || 'UNKNOWN'}
+                </strong>
+              </td>
+              <td style={{ padding: '10px' }}>
+                {r && r.rewards_usd ? '$' + parseFloat(String(r.rewards_usd)).toFixed(2) : '-'}
+              </td>
+              <td style={{ padding: '10px' }}>
+                {r && r.tx_hash && String(r.tx_hash) !== 'null' && String(r.tx_hash) !== '0x' ? (
                   <a 
                     href={`https://testnet.bscscan.com/tx/${r.tx_hash}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ color: '#0066cc', textDecoration: 'none', fontSize: '12px' }}
                   >
-                    {r.tx_hash.slice(0, 10)}...
+                    {String(r.tx_hash).slice(0, 10)}...
                   </a>
                 ) : (
                   <span style={{ color: '#999' }}>-</span>
                 )}
               </td>
             </tr>
-          ))}
+          )) : (
+            <tr>
+              <td colSpan={5} style={{ padding: '20px', textAlign: 'center', color: '#999' }}>
+                No logs available yet
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

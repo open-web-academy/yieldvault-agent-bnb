@@ -21,7 +21,27 @@ app.get('/api/logs', (req, res) => {
     const logs = content
       .split('\n')
       .filter(line => line.trim())
-      .map(line => JSON.parse(line));
+      .map(line => {
+        try {
+          const parsed = JSON.parse(line);
+          // Ensure all fields are safe
+          return {
+            timestamp: parsed.timestamp || 0,
+            cycle: parsed.cycle || 0,
+            action: parsed.action || 'UNKNOWN',
+            vault: parsed.vault || parsed.vault_id || 'unknown',
+            vault_id: parsed.vault_id || parsed.vault || 'unknown',
+            vault_name: parsed.vault_name || '',
+            tx_hash: parsed.tx_hash || '',
+            rewards_usd: parsed.rewards_usd || parsed.amount_tokens || 0,
+            confidence: parsed.confidence || 0,
+            ...parsed
+          };
+        } catch (e) {
+          return null;
+        }
+      })
+      .filter(log => log !== null);
     
     res.json(logs);
   } catch (err) {
